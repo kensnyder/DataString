@@ -93,7 +93,13 @@
 	DataString._thousandsSeparator = ',';
 	DataString._decimal = '.';
 	DataString._formatNumber = function(n, precision) {
-		n = Number(parseFloat(n + '')).toFixed(precision);
+		n = parseFloat(n + '');
+		if (precision >= 0) {
+			n = n.toFixed(precision);
+		}
+		else {
+			n = '' + n;
+		}
 		var parts = n.split('.');
 		var whole = parts[0];
 		var decimal = parts[1];

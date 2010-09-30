@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>DataString.js Unit Tests</title>
+	<title>DataString.js Unit Tests - JavaScript</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<script type="text/javascript" src="qunit/qunit.js"></script>
 	<script type="text/javascript" src="../src/DataString.js"></script>
 	<script type="text/javascript" src="../src/DataString.Aba.js"></script>
 	<script type="text/javascript" src="../src/DataString.Cc.js"></script>
+	<script type="text/javascript" src="../src/DataString.Number.js"></script>
 	<script type="text/javascript" src="../src/DataString.Dollars.js"></script>
 	<script type="text/javascript" src="../src/DataString.PhoneUs10.js"></script>
 	<link type="text/css" rel="stylesheet" href="qunit/DataString.css" media="screen" />
@@ -19,7 +20,7 @@
 <div style="clear: both;"></div>
 
 <div id="unit-output">
-	<h1 id="qunit-header">DataString.js Unit Tests</h1>
+	<h1 id="qunit-header">DataString.js Unit Tests - JavaScript</h1>
 	<h2 id="qunit-banner"></h2>
 	<h2 id="qunit-userAgent"></h2>
 	<ol id="qunit-tests"><li></li></ol>
@@ -65,8 +66,8 @@ String.prototype.getCheckdigit = function() {
 				['4111 1111 1111 1111','4111-1111-1111-1111'],
 				['4111-1111-1111-1111','4111-1111-1111-1111'],
 				['4111x1111x1111_1111','4111-1111-1111-1111'],
-				['371111111111119','3711-111111-11111'],
-				['3711 111111 11119','3711-111111-11111']
+				['371111111111119','3711-111111-11119'],
+				['3711 111111 11119','3711-111111-11119']
 			];
 			var i = 0, io;
 			while ((io = ios[i++])) {
