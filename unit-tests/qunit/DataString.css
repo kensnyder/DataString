@@ -1,0 +1,203 @@
+/* reset */
+#unit-output h1,#unit-output h2,#unit-output ul,#unit-output ol,#unit-output li,#unit-output p {
+	margin: 0;
+	padding: 0;
+}
+body {
+	padding: 8px;
+}
+/* layout */
+#unit-output {
+	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+	font-size: 14px;
+	width: 35%;
+	float: left;
+}
+#unit-page-content {
+	margin-left: 37%;
+	-moz-box-shadow: 0 3px 20px #999;
+	-webkit-box-shadow: 0 3px 20px #999;
+	box-shadow: 0 3px 20px #999;
+	padding: 8px;
+}
+/* visual */
+ol#qunit-tests {
+	list-style-position:inside;
+	font-weight: normal;
+	color: #000;
+}
+ol#qunit-tests li{
+	padding:6px 8px;
+	border-bottom:1px solid #fff;
+	list-style-position:inside;
+	border-right: 1px solid #555;
+	border-left: 1px solid #555;
+
+	box-shadow: 3px 3px 8px #b1b1b1;
+	-moz-box-shadow: 3px 3px 8px #b1b1b1;
+	-webkit-box-shadow: 3px 3px 8px #b1b1b1;
+}
+ol#qunit-tests li strong {
+	font-weight: normal;
+}
+ol#qunit-tests li ol{
+	box-shadow: inset 0px 2px 5px #999;
+	-moz-box-shadow: inset 0px 2px 5px #999;
+	-webkit-box-shadow: inset 0px 2px 5px #999;
+	margin-top:0.5em;
+	margin-left:0;
+	padding:0.5em;
+	background-color:#f0f0ff;
+	border-radius:5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+ol#qunit-tests li li{
+	margin:3px;
+	background-color:#f0f0ff;
+	list-style-position: inside;
+	padding:3px 4px;
+	border-right: none;
+	font-weight: normal;
+
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
+ol#qunit-tests li li.pass{
+	border: none;
+	border-left:23px solid #70AA14;
+	background-color:#f0f0ff;
+	color:#111;
+}
+ol#qunit-tests li li.fail{
+	border: none;
+	border-left:23px solid #DB3636;
+	background-color:#f0f0ff;
+	color:#111;
+	padding:3px 4px;
+}
+ol#qunit-tests li.pass{
+	background-color:#E0E8F5;
+}
+ol#qunit-tests li.fail {
+	padding: 5px 7px;
+	border: 1px solid #CB3005;
+	background-color: #FFB5B5;
+}
+ol#qunit-tests li strong {
+	cursor:pointer;
+}
+h1#qunit-header{
+	padding:14px 8px;
+	text-align: center;
+	font-size: 22px;
+	color:#555555;
+	border-top: 1px solid #555555;
+	border-right: 1px solid #555555;
+	border-left: 1px solid #555555;
+	border-top-right-radius:8px;
+	border-top-left-radius:8px;
+	-moz-border-radius-topright:8px;
+	-moz-border-radius-topleft:8px;
+	-webkit-border-top-right-radius:8px;
+	-webkit-border-top-left-radius:8px;
+	
+	box-shadow: 3px 3px 8px #b1b1b1;
+	-moz-box-shadow: 3px 3px 8px #b1b1b1;
+	-webkit-box-shadow: 3px 3px 8px #b1b1b1;
+
+	text-shadow: #fff 1px 1px 0;
+	/* Legacy browsers */
+	background-color: #EEEEEF;
+	/* Recent browsers */
+	background: -moz-linear-gradient(
+		top,
+		#EEEEEF,
+		#D1D1D1
+	);
+	background: -webkit-gradient(
+		linear,
+		left top, left bottom,
+		from(#EEEEEF),
+		to(#D1D1D1)
+	);
+}
+h2#qunit-banner{
+	height:5px;
+	background-color:#b3b3b3;
+	border-right: 1px solid #555;
+	border-left: 1px solid #555;
+	box-shadow: 3px 3px 8px #b1b1b1;
+	-moz-box-shadow: 3px 3px 8px #b1b1b1;
+	-webkit-box-shadow: 3px 3px 8px #b1b1b1;
+}
+h2#qunit-banner.qunit-pass{
+	background-color:#70AA14;
+	border-right: 1px solid #555;
+	border-left: 1px solid #555;
+}
+h2#qunit-banner.qunit-fail, #qunit-testrunner-toolbar {
+	background-color:#EE5757;
+	border-right: 1px solid #555;
+	border-left: 1px solid #555;
+}
+#qunit-testrunner-toolbar {
+	padding:0em 0 0.5em 2em;
+}
+h2#qunit-userAgent {
+	font-size: 11px;
+	font-weight: normal;
+	border-right: 1px solid #555;
+	border-left: 1px solid #555;
+	border-bottom: 1px solid #555555;
+	background-color:#BDBFC2;
+	color:#333;
+	padding:8px;
+
+		box-shadow: 3px 3px 8px #b1b1b1;
+	-moz-box-shadow: 3px 3px 8px #b1b1b1;
+	-webkit-box-shadow: 3px 3px 8px #b1b1b1;
+
+	/* Legacy browsers */
+	background-color: #d1d1d1;
+	/* Recent browsers */
+	background: -moz-linear-gradient(
+		top,
+		#D1D1D1,
+		#BDBFC2
+	);
+	background: -webkit-gradient(
+		linear,
+		left top, left bottom,
+		from(#D1D1D1),
+		to(#BDBFC2)
+	);
+}
+p#qunit-testresult{
+	color:#000;
+	font-weight: bold;
+	border-bottom-right-radius:8px;
+	border-bottom-left-radius:8px;
+	-moz-border-radius-bottomright:8px;
+	-moz-border-radius-bottomleft:8px;
+	-webkit-border-bottom-right-radius:8px;
+	-webkit-border-bottom-left-radius:8px;
+	background-color:#B3C7E7;
+	padding:12px 8px;
+	border-top: 1px solid #555;
+	border-right: 1px solid #555;
+	border-bottom: 1px solid #555;
+	border-left: 1px solid #555;
+
+	box-shadow: 3px 3px 8px #b1b1b1;
+	-moz-box-shadow: 3px 3px 8px #b1b1b1;
+	-webkit-box-shadow: 3px 3px 8px #b1b1b1;
+}
+strong b.fail{
+	color:#C90202;
+}
+strong b.pass{
+	color:#029102;
+}
