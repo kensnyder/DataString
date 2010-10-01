@@ -48,46 +48,64 @@ String.prototype.getCheckdigit = function() {
 	return 10 - (sum % 10);
 }
 
-	with (QUnit) {
+function interpret(v) {
+	return (typeof v == 'undefined' || v === null ? '' : 
+		v === true ? '1' :
+		v === false ? '0' :
+		v
+	);
+}
 
-		<?php createAndInvoke("Dollars", "format", array(
-			array('a','$0.00'),
-			array('0','$0.00'),
-			array('-0','$0.00'),
-			array('-1','$-1.00'),
-			array('123','$123.00'),
-			array('$123','$123.00'),
-			array('$1123','$1,123.00'),
-			array('$1,123','$1,123.00'),
-			array('1234567.123','$1,234,567.12'),
-		)); ?>
+with (QUnit) {
 
-		<?php createAndInvoke("Cc", "format", array(
-			array('4111111111111111','4111-1111-1111-1111'),
-			array('4111 1111 1111 1111','4111-1111-1111-1111'),
-			array('4111-1111-1111-1111','4111-1111-1111-1111'),
-			array('4111x1111x1111_1111','4111-1111-1111-1111'),
-			array('371111111111119','3711-111111-11119'),
-			array('3711 111111 11119','3711-111111-11119'),
-		)); ?>
+	<?php createAndInvoke("Number", "format", array(
+		array('a','0'),
+		array('a','0.0', 1),
+		array('0','0'),
+		array('-0','0'),
+		array('-1','-1'),
+		array('123.1234','123.12', 2),
+		array('$123','0.00', 2),
+	)); ?>
 
-		<?php createAndInvoke("Cc", "isValid", array(
-			array('4111-1111-1111-1111','1','good checksum ok'),
-			array('4111 1111 1111 1112','0','bad checksum invalid'),
-		)); ?>
+	<?php createAndInvoke("Dollars", "format", array(
+		array('a','$0.00'),
+		array('0','$0.00'),
+		array('-0','$0.00'),
+		array('-1','$-1.00'),
+		array('123','$123.00'),
+		array('$123','$123.00'),
+		array('$1123','$1,123.00'),
+		array('$1,123','$1,123.00'),
+		array('1234567.123','$1,234,567.12'),
+	)); ?>
 
-		<?php /*createAndInvoke("Cc", "getType", array(
-			array('341111111111112','amex'),
-			array('351111111111111','amex'),
-			array('361111111111110','amex'),
-			array('371111111111119','amex'),
-			array('4111111111111111','visa'),
-			array('5111111111111119','mc'),
-			array('6011111111111118','disc'),
-			array('0011111111111111',''),
-		)); */?>
+	<?php createAndInvoke("Cc", "format", array(
+		array('4111111111111111','4111-1111-1111-1111'),
+		array('4111 1111 1111 1111','4111-1111-1111-1111'),
+		array('4111-1111-1111-1111','4111-1111-1111-1111'),
+		array('4111x1111x1111_1111','4111-1111-1111-1111'),
+		array('371111111111119','3711-111111-11119'),
+		array('3711 111111 11119','3711-111111-11119'),
+	)); ?>
 
-	}
+	<?php createAndInvoke("Cc", "isValid", array(
+		array('4111-1111-1111-1111','1','good checksum ok'),
+		array('4111 1111 1111 1112','0','bad checksum invalid'),
+	)); ?>
+
+	<?php createAndInvoke("Cc", "getType", array(
+		array('341111111111112','amex'),
+		array('351111111111111','amex'),
+		array('361111111111110','amex'),
+		array('371111111111119','amex'),
+		array('4111111111111111','visa'),
+		array('5111111111111119','mc'),
+		array('6011111111111118','disc'),
+		array('0011111111111111',''),
+	)); ?>
+
+}
 
 </script>
 
@@ -98,18 +116,27 @@ String.prototype.getCheckdigit = function() {
 
 
 function createAndInvoke($subclass, $method, $inputOutputs) {
-	$js = "test('DataString.$subclass', function() {";
+	$js = "test('DataString.$subclass(value).$method()', function() {\n";
 	foreach ($inputOutputs as $no => $io) {
-		@list ($input, $expectedOutput, $label) = $io;
-		$jsLabel = ($no + 1) . '. ' . ($label ? "js - $label" : 'js');
-		$phpLabel = ($no + 1) . '. ' . ($label ? "php - $label" : 'php');
-
-		$js .= "equal(new DataString.$subclass(\"$input\").$method(), \"$expectedOutput\", \"$jsLabel\");\n";
+		@list ($input, $expectedOutput) = $io;
+		$args = array_slice($io, 2);
+		$strArgs = '';
+		if (count($args)) {
+			$strArgs = array();
+			foreach ($args as $arg) {
+				$strArgs[] = "\"$arg\"";
+			}
+			$strArgs = join(",",$strArgs);
+		}
+		$strArgsEsc = str_replace('"', '\\"', $strArgs);
+		$jsLabel = ($no + 1) . ". DataString.$subclass(\\\"$input\\\").$method($strArgsEsc)";
+		$phpLabel = ($no + 1) . ". DataString_$subclass(\\\"$input\\\")->$method($strArgsEsc)";
+		$js .= "\t\tequal(interpret(new DataString.$subclass(\"$input\").$method($strArgs)), \"$expectedOutput\", \"$jsLabel\");\n";
 		$class = "DataString_$subclass";
 		$str = new $class($input);
-		$actual = $str->$method();
+		$actual = call_user_func_array(array($str,$method), $args);
 		$actual = is_bool($actual) ? (int) $actual : $actual;
-		$js .= "equal(\"$actual\", \"$expectedOutput\", \"$phpLabel\");\n";
+		$js .= "\t\tequal(\"$actual\", \"$expectedOutput\", \"$phpLabel\");\n";
 	}
 	$js .= "});";
 	echo $js;
