@@ -1,5 +1,5 @@
 DataString.Dollars = DataString.Number.createSubclass({
 	format: function(doRound) {
-		return '$' + DataString._formatNumber(this.toValue(), doRound ? 0 : 2);
+		return '$' + DataString.numberFormat(this.valueOf(), doRound ? 0 : 2);
 	}
 });

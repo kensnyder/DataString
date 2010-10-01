@@ -7,11 +7,11 @@ class DataString_Number extends DataString {
 	}
 
 	public function format($precision) {
-		return '$' . number_format($this->toValue(), $precision);
+		return '$' . number_format($this->valueOf(), $precision);
 	}
 
-	public function toValue() {
-		return (float) preg_replace('/[^\d.-]/', $this->raw);
+	public function valueOf() {
+		return (float) preg_replace('/[^\d.-]/', '', $this->raw);
 	}
 
 }

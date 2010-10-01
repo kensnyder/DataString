@@ -1,5 +1,6 @@
 (function(global) {
 
+	// Helper Functions
 	var nada = {};
 	function extend(d, s) {
 		for (var p in s) {
@@ -19,11 +20,7 @@
 			element.attachEvent("on" + type, callback);
 		}
 	;
-	function DataString(value) {
-		if (value !== nada) {
-			this.setValue(value)
-		}
-	}
+	// end helper functions
 
 	var staticMethods = {
 		validateInput: function(input, callback) {
@@ -71,51 +68,7 @@
 		}
 	};
 
-	function createSubclass(methods) {
-		var klass = function(value) {
-			if (value !== nada) {
-				this.setValue(value)
-			}
-		};
-		extend(klass, staticMethods);
-		klass.createSubclass = createSubclass;
-		klass.prototype = new DataString(nada);
-		klass.prototype.constructor = klass;
-		klass.prototype.constructor.parent = this;
-		if (methods) {
-			extend(klass.prototype, methods);
-		}
-		return klass;
-	};
-	DataString.createSubclass = createSubclass;
-	extend(DataString, staticMethods);
-
-	DataString._thousandsSeparator = ',';
-	DataString._decimal = '.';
-	DataString._formatNumber = function(n, precision) {
-		n = parseFloat(n + '');
-		if (precision >= 0) {
-			n = n.toFixed(precision);
-		}
-		else {
-			n = '' + n;
-		}
-		var parts = n.split('.');
-		var whole = parts[0];
-		var decimal = parts[1];
-		var sign = (whole.charAt(0) == '-' ? '-' : '');
-		whole = whole.replace('-', '');
-		var threes = [];
-		while (whole.length) {
-			threes.unshift(whole.slice(-3));
-			whole = whole.slice(0, -3);
-		}
-		return sign + threes.join(DataString._thousandsSeparator) + (decimal ? DataString._decimal + decimal : '');
-	};
-
-	//
-	// instance methods
-	extend(DataString.prototype, {
+	var instanceMethods = {
 		setValue: function(value) {
 			this.raw = (typeof value == 'undefined' || value === null ? '' : value + '').replace(/^\s+/, '').replace(/\s+$/, '');
 			return this;
@@ -138,14 +91,70 @@
 		toString: function() {
 			return this.format();
 		},
-		toValue: function() {
+		valueOf: function() {
 			return this.raw;
 		},
 		isAllowedChar: function(c) {
 			return true;
 		}
-	});
+	};
 
+	var createSubclass = function(methods) {
+		var klass = function(value) {
+			if (value !== nada) {
+				this.setValue(value)
+			}
+		};
+		extend(klass, staticMethods);
+		klass.createSubclass = createSubclass;
+		klass.prototype = new this(nada);
+		klass.prototype.constructor = klass;
+		klass.prototype.constructor.parent = this;
+		if (methods) {
+			extend(klass.prototype, methods);
+		}
+		return klass;
+	};
+
+	// constructor (same as above)
+	function DataString(value) {
+		if (value !== nada) {
+			this.setValue(value)
+		}
+	}
+	DataString.createSubclass = createSubclass;
+	extend(DataString, staticMethods);
+	extend(DataString.prototype, instanceMethods);
+
+	// public helper methods
+	DataString.numberFormat = function(n, precision) {
+		n = parseFloat(n + '');
+		n = isNaN(n) ? 0 : n;
+		if (precision >= 0) {
+			n = n.toFixed(precision);
+		}
+		else {
+			n = '' + n;
+		}
+		var parts = n.split('.');
+		var whole = parts[0];
+		var decimal = parts[1];
+		var sign = (whole.charAt(0) == '-' ? '-' : '');
+		whole = whole.replace('-', '');
+		var threes = [];
+		while (whole.length) {
+			threes.unshift(whole.slice(-3));
+			whole = whole.slice(0, -3);
+		}
+		return sign + 
+			threes.join(DataString.numberFormat.thousandsSeparator) +
+			(decimal ? DataString.numberFormat.decimalPoint + decimal : '');
+	};
+	DataString.numberFormat.thousandsSeparator = ',';
+	DataString.numberFormat.decimalPoint = '.';
+	// end public helper methods
+
+	// assign to global
 	global.DataString = DataString;
 
 })(this);

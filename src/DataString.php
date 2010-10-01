@@ -64,7 +64,7 @@ class DataString {
 		return $this->format();
 	}
 
-	public function toValue() {
+	public function valueOf() {
 		return $this->raw;
 	}
 

@@ -19,7 +19,7 @@ DataString.Cc = DataString.createSubclass({
 		if (!this.isValidFormat()) {
 			return false;
 		}
-		var digits = this.toValue();
+		var digits = this.valueOf();
 		var i = 0, sum = 0;
 		while (i < digits.length) {
 			sum += ((i % 2) == 0 ? 2 : 1) * parseInt(digits[i++], 10);
@@ -46,7 +46,7 @@ DataString.Cc = DataString.createSubclass({
 		}
 		return this.raw;
 	},
-	toValue: function() {
+	valueOf: function() {
 		return this.raw.replace(/\D/g, '');
 	},
 	getType: function() {

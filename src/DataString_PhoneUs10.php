@@ -12,7 +12,7 @@ class DataString_PhoneUs10 extends DataString {
 		return preg_replace($this->matcher, '($1) $2$3$4', $this->raw);
 	}
 
-	public function toValue() {
+	public function valueOf() {
 		return preg_replace($this->matcher, '$1$2$3$4', $this->raw);
 	}
 	

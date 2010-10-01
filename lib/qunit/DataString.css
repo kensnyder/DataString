@@ -5,11 +5,11 @@
 }
 body {
 	padding: 8px;
+	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+	font-size: 14px;
 }
 /* layout */
 #unit-output {
-	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
-	font-size: 14px;
 	width: 35%;
 	float: left;
 }
@@ -21,6 +21,10 @@ body {
 	padding: 8px;
 }
 /* visual */
+#php-summary {
+	clear: both;
+	padding-top: 20px;
+}
 ol#qunit-tests {
 	list-style-position:inside;
 	font-weight: normal;
@@ -36,6 +40,7 @@ ol#qunit-tests li{
 	box-shadow: 3px 3px 8px #b1b1b1;
 	-moz-box-shadow: 3px 3px 8px #b1b1b1;
 	-webkit-box-shadow: 3px 3px 8px #b1b1b1;
+	list-style-type: none;
 }
 ol#qunit-tests li strong {
 	font-weight: normal;
@@ -53,10 +58,10 @@ ol#qunit-tests li ol{
 	-webkit-border-radius: 5px;
 }
 ol#qunit-tests li li{
-	margin:3px;
+	margin:2px;
 	background-color:#f0f0ff;
 	list-style-position: inside;
-	padding:3px 4px;
+	padding:0 4px;
 	border-right: none;
 	font-weight: normal;
 

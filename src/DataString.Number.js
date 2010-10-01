@@ -3,9 +3,9 @@ DataString.Number = DataString.createSubclass({
 		return this.raw.match(/^\$?\s*[\d,.-]+$/)
 	},
 	format: function(precision) {
-		return '$' + DataString._formatNumber(this.toValue(), precision);
+		return '$' + DataString.numberFormat(this.valueOf(), precision);
 	},
-	toValue: function() {
+	valueOf: function() {
 		return Number(this.raw.replace(/[^\d.-]/g, ''));
 	},
 	isAllowedChar: function(c) {

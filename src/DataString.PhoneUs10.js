@@ -7,7 +7,7 @@ DataString.PhoneUs10 = DataString.createSubclass({
 	format: function() {
 		return this.raw.replace(this.matcher, '($1) $2$3$4');
 	},
-	toValue: function() {
+	valueOf: function() {
 		return this.raw.replace(this.matcher, '$1$2$3$4');
 	}
 });
