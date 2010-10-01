@@ -25,8 +25,8 @@ Unit tests exactly the same for PHP and JavaScript.
 
 DataString aims to be extensible to create your own types. For example, you may have a part number that is in the format A##-###:
 
-  // JavaScript for Part Number Data type
-  DataString.Partnumber = DataString.createSubclass({
+	// JavaScript for Part Number Data type
+	DataString.Partnumber = DataString.createSubclass({
 		matcher: /([a-z]\d\d)\W?(\d{3})/i,
 		isValid: function() {
 			return this.raw.match(this.matcher);
