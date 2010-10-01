@@ -2,7 +2,7 @@ DataString.Cc = DataString.createSubclass({
 	matcher15: /^(\d{4})\D*(\d{6})\D*(\d{5})$/,
 	matcher16: /^(\d{4})\D*(\d{4})\D*(\d{4})\D*(\d{4})$/,
 	isValid: function() {
-		return this.isValidChecksum();
+		return this.isValidFormat() && this.isValidChecksum() && this.isSupportedType();
 	},
 	isSupportedType: function() {
 		var type = this.getType();
@@ -10,15 +10,9 @@ DataString.Cc = DataString.createSubclass({
 		return (' ' + supp + ' ').indexOf(' ' + type + ' ') > -1;
 	},
 	isValidFormat: function() {
-		if (!this.isSupportedType()) {
-			return false;
-		}
 		return this.raw.match(this.matcher15) || this.raw.match(this.matcher16);
 	},
 	isValidChecksum: function() {
-		if (!this.isValidFormat()) {
-			return false;
-		}
 		var digits = this.valueOf();
 		var i = 0, sum = 0;
 		while (i < digits.length) {
@@ -52,8 +46,8 @@ DataString.Cc = DataString.createSubclass({
 	getType: function() {
 		// not intended to validate number, just guess what card type user
 		// is trying to use by looking at known prefixes
-		var m = this.raw.match(/^(34|35|36|37|4|5|6011)/);
-		if (m) {
+		var m;
+		if ((m = this.raw.match(/^(34|35|36|37|4|5|6011)/))) {
 			switch (m[1]) {
 				case '6011': return 'disc';
 				case '5':    return 'mc';

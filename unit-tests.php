@@ -108,6 +108,7 @@ function createAndInvoke($subclass, $method, $inputOutputs) {
 		$class = "DataString_$subclass";
 		$str = new $class($input);
 		$actual = $str->$method();
+		$actual = is_bool($actual) ? (int) $actual : $actual;
 		$js .= "equal(\"$actual\", \"$expectedOutput\", \"$phpLabel\");\n";
 	}
 	$js .= "});";
