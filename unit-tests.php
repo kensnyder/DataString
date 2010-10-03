@@ -1,7 +1,7 @@
 <?php
 
 $begin = microtime(true);
-$subclasses = array('Aba','Cc','Number','Dollars','PhoneUs10');
+$subclasses = array('Aba','Cc','Date','Number','Dollars','PhoneUs10');
 
 require_once(dirname(__FILE__) . "/src/DataString.php");
 foreach ($subclasses as $sub) {
@@ -161,8 +161,8 @@ with (QUnit) {
 	))?>
 
 	<?php createAndInvoke("Cc", "isValid", array(
-		array('4111-1111-1111-1111','1','good checksum ok'),
-		array('4111 1111 1111 1112','0','bad checksum invalid'),
+		array('4111-1111-1111-1111','1'),
+		array('4111 1111 1111 1112','0'),
 	))?>
 
 	<?php createAndInvoke("Cc", "getType", array(
@@ -174,6 +174,20 @@ with (QUnit) {
 		array('5111111111111119','mc'),
 		array('6011111111111118','disc'),
 		array('0011111111111111',''),
+	))?>
+
+	<?php createAndInvoke("Date", "format", array(
+		array('2010-03-13','2010-03-13'),
+		array('2010-3-13','2010-03-13'),
+		array('3-13-2010','2010-03-13'),
+		array('03-13-2010','2010-03-13'),
+		array('3/13/2010','2010-03-13'),
+		array('03/13/2010','2010-03-13'),
+		array('13.3.2010','2010-03-13'),
+		array('13.03.2010','2010-03-13'),
+		array('13-Mar-2010','2010-03-13'),
+		array('13-March-2010','2010-03-13'),
+		array('March 13, 2010','2010-03-13'),
 	))?>
 
 }
