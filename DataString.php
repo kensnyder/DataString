@@ -1,7 +1,7 @@
 <?php
 
 /*
- * DataString JavaScript and PHP Library v0.8
+ * DataString JavaScript and PHP Library v%VERSION%
  * (c) 2010 Ken Snyder, MIT-style license
  * http://http://github.com/kensnyder/DataString
  */
@@ -10,6 +10,8 @@
  *
  */
 class DataString {
+
+	public $version = '%VERSION%';
 
 	/**
 	 * The raw and unformatted value of the data

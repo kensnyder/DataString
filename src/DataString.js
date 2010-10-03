@@ -1,3 +1,8 @@
+/*
+ * DataString JavaScript and PHP Library v%VERSION%
+ * (c) 2010 Ken Snyder, MIT-style license
+ * http://http://github.com/kensnyder/DataString
+ */
 (function(global) {
 
 	// Helper Functions
@@ -22,7 +27,7 @@
 	;
 	// end helper functions
 
-	var staticMethods = {
+	var staticProps = {
 		validateInput: function(input, callback) {
 			input = $(input);
 			var me = new this;
@@ -68,7 +73,8 @@
 		}
 	};
 
-	var instanceMethods = {
+	var instanceProps = {
+		version: '%VERSION%',
 		setValue: function(value) {
 			this.raw = (typeof value == 'undefined' || value === null ? '' : value + '').replace(/^\s+/, '').replace(/\s+$/, '');
 			return this;
@@ -105,7 +111,7 @@
 				this.setValue(value)
 			}
 		};
-		extend(klass, staticMethods);
+		extend(klass, staticProps);
 		klass.createSubclass = createSubclass;
 		klass.prototype = new this(nada);
 		klass.prototype.constructor = klass;
@@ -123,8 +129,8 @@
 		}
 	}
 	DataString.createSubclass = createSubclass;
-	extend(DataString, staticMethods);
-	extend(DataString.prototype, instanceMethods);
+	extend(DataString, staticProps);
+	extend(DataString.prototype, instanceProps);
 
 	// public helper methods
 	DataString.numberFormat = function(n, precision) {

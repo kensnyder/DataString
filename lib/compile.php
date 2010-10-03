@@ -2,6 +2,7 @@
 
 $src = dirname(__FILE__) . '/../src';
 $dist = dirname(__FILE__) . '/..';
+$version = isset($_GET['v']) ? $_GET['v'] : '0.8.1';
 
 $includes = array('Aba','Cc','Dollars','PhoneUs10');
 $php = file_get_contents("$src/DataString.php");
@@ -15,4 +16,4 @@ foreach ($includes as $include) {
 $jsBytes = file_put_contents("$dist/DataString.js", $js);
 $phpBytes = file_put_contents("$dist/DataString.php", $php);
 
-echo "Wrote $jsBytes bytes to js, $phpBytes bytes to php.";
+echo "Version $version. Wrote $jsBytes bytes to js, $phpBytes bytes to php.";
