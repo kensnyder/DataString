@@ -23,30 +23,37 @@
 		// references:
 		//   personal testing,
 		//   http://unixpapa.com/js/key.html
+		32: '  ', // All
 		39: '\'"', // Op?
 		42: '**', // Op10.62
 		43: '==', // Op10.62
 		44: ',<', // Op?
 		45: '--', // Op10.62
+		46: '.>', // Op?
 		47: '//', // Op10.62
 		61: '=+', // Op10.62
 		78: '..', // Op10.62
-		192: '`~', // FF3.6, S5, Ch6, Op10.62
-		109: '-_', // FF3.6, Op10.62
-		107: '=+', // FF3.6,  (Note: num pad + on some keyboards will be 107)
-		219: '[{', // FF3.6, S5, Ch6, Op10.62
-		221: ']}', // FF3.6, S5, Ch6, Op10.62
+		192: '`~', // FF3.6, S5, Ch6, Op10.62, IE8
+		126: '`~', // Mac FF?
+		91: '[{', // Op?
+		92: '\\|', // Op?
+		93: ']}', // Op?
+		96: '`~', // Op?
+		109: '-_', // FF3.6, Op10.62, IE8
+		107: '=+', // FF3.6, IE8  (Note: num pad + on some keyboards will be 107)
+		219: '[{', // FF3.6, S5, Ch6, Op10.62, IE8
+		221: ']}', // FF3.6, S5, Ch6, Op10.62, IE8
 		220: '\\|', // FF3.6, S5, Ch6, Op10.62
 		59: ';:', // FF3.6, S5, Ch6, Op10.62
-		222: '\'"', // FF3.6, S5, Ch6, Op10.62
-		186: ';:', // S5, Ch6
+		222: '\'"', // FF3.6, S5, Ch6, Op10.62, IE8
+		186: ';:', // S5, Ch6, IE8
 		187: '=+', // S5, Ch6
-		188: ',<', // FF3.6, S5, Ch6, Op10.62
+		188: ',<', // FF3.6, S5, Ch6, Op10.62, IE8
 		189: '-_', // S5, Ch6
-		190: '.>', // FF3.6, S5, Ch6, Op10.62
-		191: '/?', // FF3.6, S5, Ch6, Op10.62
-		111: '//', // FF3.6
-		106: '**', // FF3.6, S5, Ch6
+		190: '.>', // FF3.6, S5, Ch6, Op10.62, IE8
+		191: '/?', // FF3.6, S5, Ch6, Op10.62, IE8
+		111: '//', // FF3.6, IE8
+		106: '**', // FF3.6, S5, Ch6, IE8
 		110: '..' // FF3.6, S5, Ch6
 	};
 	function eventAscii(evt) {
@@ -61,7 +68,10 @@
 			}
 		}
 		else if (kc >= 65 && kc <= 90) { // a-z
-			ascii = String.fromCharCode(kc)['to' + (evt.shiftKey ? 'Upper' : 'Lower') + 'Case']();
+			ascii = String.fromCharCode(kc);
+			if (!evt.shiftKey) {
+				ascii = ascii.toLowerCase();
+			}
 		}
 		else if (kc >= 96 && kc <= 105) { // keypad digits
 			ascii = "0123456789".charAt(kc-96);
@@ -113,7 +123,6 @@
 					return;
 				}
 				var c = eventAscii(evt);
-console.log(evt.keyCode, evt.shiftKey, String.fromCharCode(evt.keyCode), c);
 				if (c && !me.isAllowedChar(c)) {
 					evt.preventDefault && evt.preventDefault();
 					evt.returnValue = false;
