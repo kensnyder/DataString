@@ -1,6 +1,6 @@
 DataString.Number = DataString.createSubclass({
 	isValid: function() {
-		return this.raw.match(/^\$?\s*[\d,.-]+$/)
+		return this.raw.match(/^-?[\d,]+(:?\.[\d]+)?%?$/)
 	},
 	format: function(precision) {
 		return DataString.numberFormat(this.valueOf(), precision);

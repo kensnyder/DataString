@@ -17,6 +17,60 @@
 	function $(id) {
 		return typeof id == 'string' ? document.getElementById(id) : id;
 	}
+	var symbolMap = {
+		// first character is symbol, then shift+symbol
+		// Unless labeled, browser specs are for Windows Vista
+		// references:
+		//   personal testing,
+		//   http://unixpapa.com/js/key.html
+		39: '\'"', // Op?
+		42: '**', // Op10.62
+		43: '==', // Op10.62
+		44: ',<', // Op?
+		45: '--', // Op10.62
+		47: '//', // Op10.62
+		61: '=+', // Op10.62
+		78: '..', // Op10.62
+		192: '`~', // FF3.6, S5, Ch6, Op10.62
+		109: '-_', // FF3.6, Op10.62
+		107: '=+', // FF3.6,  (Note: num pad + on some keyboards will be 107)
+		219: '[{', // FF3.6, S5, Ch6, Op10.62
+		221: ']}', // FF3.6, S5, Ch6, Op10.62
+		220: '\\|', // FF3.6, S5, Ch6, Op10.62
+		59: ';:', // FF3.6, S5, Ch6, Op10.62
+		222: '\'"', // FF3.6, S5, Ch6, Op10.62
+		186: ';:', // S5, Ch6
+		187: '=+', // S5, Ch6
+		188: ',<', // FF3.6, S5, Ch6, Op10.62
+		189: '-_', // S5, Ch6
+		190: '.>', // FF3.6, S5, Ch6, Op10.62
+		191: '/?', // FF3.6, S5, Ch6, Op10.62
+		111: '//', // FF3.6
+		106: '**', // FF3.6, S5, Ch6
+		110: '..' // FF3.6, S5, Ch6
+	};
+	function eventAscii(evt) {
+		var kc = evt.keyCode, ascii;
+		if (kc < 32) { // non-printable chars
+			return;
+		}
+		else if (kc >= 48 && kc <= 57) { // 0-9
+			ascii = String.fromCharCode(kc);
+			if (evt.shiftKey) {
+				ascii = ")!@#$%^&*(".charAt(ascii);
+			}
+		}
+		else if (kc >= 65 && kc <= 90) { // a-z
+			ascii = String.fromCharCode(kc)['to' + (evt.shiftKey ? 'Upper' : 'Lower') + 'Case']();
+		}
+		else if (kc >= 96 && kc <= 105) { // keypad digits
+			ascii = "0123456789".charAt(kc-96);
+		}
+		else if ((ascii = symbolMap[kc])) { // symbols
+			ascii = ascii.charAt(evt.shiftKey ? 1 : 0);
+		}
+		return ascii;
+	}
 	var listen = document.addEventListener ?
 		function(element, type, callback) {
 			element.addEventListener(type, callback, false);
@@ -58,12 +112,8 @@
 				if (evt.ctrlKey || evt.metaKey || evt.altKey || !evt.keyCode) {
 					return;
 				}
-				var kc = evt.keyCode;
-				console.log(kc, String.fromCharCode(kc));
-				if (kc < 10/*Tab and backspace*/ || kc == 27/*Esc*/) {
-					return;
-				}
-				var c = String.fromCharCode(kc);
+				var c = eventAscii(evt);
+console.log(evt.keyCode, evt.shiftKey, String.fromCharCode(evt.keyCode), c);
 				if (c && !me.isAllowedChar(c)) {
 					evt.preventDefault && evt.preventDefault();
 					evt.returnValue = false;

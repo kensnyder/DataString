@@ -4,7 +4,7 @@ $src = dirname(__FILE__) . '/../src';
 $dist = dirname(__FILE__) . '/..';
 $version = isset($_GET['v']) ? $_GET['v'] : '0.8.1';
 
-$includes = array('Aba','Cc','Dollars','PhoneUs10');
+$includes = array('Aba','Cc','Date','Number','Dollars','Email','Percent','PhoneUs10','Ssn','Url');
 $php = file_get_contents("$src/DataString.php");
 $js = file_get_contents("$src/DataString.js");
 
