@@ -2,9 +2,9 @@
 
 $src = dirname(__FILE__) . '/../src';
 $dist = dirname(__FILE__) . '/..';
-$version = isset($_GET['v']) ? $_GET['v'] : '0.8.1';
+$version = isset($_GET['v']) ? $_GET['v'] : '0.8.2';
 
-$includes = array('Aba','Cc','Date','Number','Dollars','Email','Percent','PhoneUs10','Ssn','Url');
+$includes = array('Aba','Cc','Date','Number','Dollars','Email','Percent','PhoneUs10','Ssn','UrlAscii');
 $php = file_get_contents("$src/DataString.php");
 $js = file_get_contents("$src/DataString.js");
 
