@@ -197,36 +197,80 @@ with (QUnit) {
 			var parts = new DataString.UrlAscii(url).getParts();
 			i++;
 			if (parts) {
-				equal(parts.scheme, scheme, i + '. scheme in `' + url + '`');
-				equal(parts.user, user, i + '. user in `' + url + '`');
-				equal(parts.pass, pass, i + '. pass in `' + url + '`');
-				equal(parts.host, host, i + '. host in `' + url + '`');
-				equal(parts.port, port, i + '. port in `' + url + '`');
-				equal(parts.path, path, i + '. path in `' + url + '`');
-				equal(parts.query, query, i + '. query in `' + url + '`');
-				equal(parts.fragment, fragment, i + '. fragment in `' + url + '`');
+				equal(parts.scheme, scheme, 'js: ' + i + '. scheme in `' + url + '`');
+				equal(parts.user, user, 'js: ' + i + '. user in `' + url + '`');
+				equal(parts.pass, pass, 'js: ' + i + '. pass in `' + url + '`');
+				equal(parts.host, host, 'js: ' + i + '. host in `' + url + '`');
+				equal(parts.port, port, 'js: ' + i + '. port in `' + url + '`');
+				equal(parts.path, path, 'js: ' + i + '. path in `' + url + '`');
+				equal(parts.query, query, 'js: ' + i + '. query in `' + url + '`');
+				equal(parts.fragment, fragment, 'js: ' + i + '. fragment in `' + url + '`');
 			}
 			else {
-				ok(false, i + '.scheme and or host not found in url `' + url + '`');
+				ok(false, i + '. scheme and or host not found in url `' + url + '`');
 			}
 		}
-		var u = undefined, url;
+		var url;
 
 		url  = 'http://host';
-		testParts(url, 'http', u, u, 'host');
+		testParts(url, 'http', false, false, 'host', false, false, false, false);
 
 		url = 'http://host.com';
-		testParts(url, 'http', u, u, 'host.com');
+		testParts(url, 'http', false, false, 'host.com', false, false, false, false);
 
 		url = 'http://host.com/path/one/two/?query#fragment';
-		testParts(url, 'http', u, u, 'host.com', u, 'path/one/two', 'query', 'fragment');
+		testParts(url, 'http', false, false, 'host.com', false, 'path/one/two', 'query', 'fragment');
 
 		url = 'http://user@host.com/path/one/two/?query=1#fragment';
-		testParts(url, 'http', 'user', u, 'host.com', u, 'path/one/two', 'query=1', 'fragment');
+		testParts(url, 'http', 'user', false, 'host.com', false, 'path/one/two', 'query=1', 'fragment');
 
 		url = 'http://user:password@host.com:1234/path/one/two/?query=1&a=2#fragment';
 		testParts(url, 'http', 'user', 'password', 'host.com', 1234, 'path/one/two', 'query=1&a=2', 'fragment');
 
+		url = 'http://subdomain.domain-name.com?query=1+2';
+		testParts(url, 'http', false, false, 'subdomain.domain-name.com', false, false, 'query=1+2', false);
+
+		url = 'some string';
+		equal(new DataString.UrlAscii(url).isValid(), false, 'invalid url');
+
+		<?php
+		function testParts($url, $scheme, $user, $pass, $host, $port, $path, $query, $fragment) {
+			static $i;
+			$i++;
+			$ds = new DataString_UrlAscii($url);
+			$parts = $ds->getParts();
+			if ($parts) {
+				echo 'equal("' . $parts->host . '","' . $host . "\",'php: $i. host in `$url`');\n";
+			}
+			else {
+				echo "ok(false, '$i. scheme and or host not found in url `$url`');\n";
+			}
+		}
+
+			$url  = 'http://host';
+			testParts($url, 'http', false, false, 'host', false, false, false, false);
+
+			$url = 'http://host.com';
+			testParts($url, 'http', false, false, 'host.com', false, false, false, false);
+
+			$url = 'http://host.com/path/one/two/?query#fragment';
+			testParts($url, 'http', false, false, 'host.com', false, 'path/one/two', 'query', 'fragment');
+
+			$url = 'http://user@host.com/path/one/two/?query=1#fragment';
+			testParts($url, 'http', 'user', false, 'host.com', false, 'path/one/two', 'query=1', 'fragment');
+
+			$url = 'http://user:password@host.com:1234/path/one/two/?query=1&a=2#fragment';
+			testParts($url, 'http', 'user', 'password', 'host.com', 1234, 'path/one/two', 'query=1&a=2', 'fragment');
+
+			$url = 'http://subdomain.domain-name.com?query=1+2';
+			testParts($url, 'http', false, false, 'subdomain.domain-name.com', false, false, 'query=1+2', false);
+
+			$url = 'some string';
+			$ds = new DataString_UrlAscii($url);
+			$valid = $ds->isValid() ? 'true' : 'false';
+			echo "equal($valid, false, 'invalid url');\n";
+
+		?>
 	});
 
 }

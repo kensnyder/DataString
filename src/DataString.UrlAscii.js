@@ -1,6 +1,5 @@
 DataString.UrlAscii = DataString.createSubclass({
 
-	//matcher: ^([a-z]+)\:\/\/([a-z.-]+)(?:\/?([^?#]+)?)(?:\?([^#]+))?(?:\#(.*))?$/i
 	matchers: {
 		scheme: /^([a-z]+)\:/i,
 		user: /:\/\/([\w._+-]+)(?:\:|@)/,
@@ -24,15 +23,15 @@ DataString.UrlAscii = DataString.createSubclass({
 				parts[part] = m[1];
 			}
 			else {
-				parts[part] = undefined;
+				parts[part] = false;
 			}
 		}
 		if (!parts.scheme || !parts.host) {
 			return false;
 		}
-		parts.path = parts.path ? parts.path.replace(/\/$/, '') : undefined;
+		parts.path = parts.path ? parts.path.replace(/\/$/, '') : false;
 		if (parts.pass == parts.port) {
-			parts.pass = undefined;
+			parts.pass = false;
 		}
 		if (parts.user == parts.host) {
 			m = this.raw.match(this.matchers.host2);
