@@ -1,22 +1,23 @@
 DataString.Cc = DataString.createSubclass({
-	matcher15: /^(\d{4})\D*(\d{6})\D*(\d{5})$/,
-	matcher16: /^(\d{4})\D*(\d{4})\D*(\d{4})\D*(\d{4})$/,
+	matcher15: /^(\d{4})\D?(\d{6})\D?(\d{5})$/,
+	matcher16: /^(\d{4})\D?(\d{4})\D?(\d{4})\D?(\d{4})$/,
 	isValid: function() {
 		return this.isValidFormat() && this.isValidChecksum() && this.isSupportedType();
 	},
 	isSupportedType: function() {
 		var type = this.getType();
 		var supp = this.getSupportedTypes().join(' ');
+		// use strings to avoid IE's missing Array#indexOf
 		return (' ' + supp + ' ').indexOf(' ' + type + ' ') > -1;
 	},
 	isValidFormat: function() {
-		return this.raw.match(this.matcher15) || this.raw.match(this.matcher16);
+		return this.matcher16.test(this.raw) || this.matcher15.test(this.raw);
 	},
 	isValidChecksum: function() {
 		var digits = this.valueOf();
 		var i = 0, sum = 0;
 		while (i < digits.length) {
-			sum += ((i % 2) == 0 ? 2 : 1) * parseInt(digits[i++], 10);
+			sum += ((i % 2) == 0 ? 2 : 1) * parseInt(digits.substr(i++,1), 10);
 		}
 		return (sum % 10) == 0;
 	},
@@ -47,7 +48,7 @@ DataString.Cc = DataString.createSubclass({
 		// not intended to validate number, just guess what card type user
 		// is trying to use by looking at known prefixes
 		var m;
-		if ((m = this.raw.match(/^(34|35|36|37|4|5|6011)/))) {
+		if ((m = this.raw.match(/^(3[4-7]|4|5|6011)/))) {
 			switch (m[1]) {
 				case '6011': return 'disc';
 				case '5':    return 'mc';

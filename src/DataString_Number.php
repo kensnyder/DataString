@@ -11,7 +11,7 @@ class DataString_Number extends DataString {
 	}
 
 	public function valueOf() {
-		return (float) $this->raw;
+		return (float) preg_replace('/[^\d.-]/', '', $this->raw);
 	}
 
 }

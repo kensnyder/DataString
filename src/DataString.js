@@ -6,12 +6,18 @@
 (function(global) {
 
 	// Helper Functions
-	var nada = {};
 	function extend(d, s) {
 		for (var p in s) {
 			if (Object.prototype.hasOwnProperty.call(s, p)) {
 				d[p] = s[p];
 			}
+		}
+		// since valueOf and toString are not enumerable, do a special check
+		if (Object.prototype.valueOf !== s.valueOf) {
+			d.valueOf = s.valueOf;
+		}
+		if (Object.prototype.toString !== s.toString) {
+			d.toString = s.toString;
 		}
 	}
 	function $(id) {
@@ -23,6 +29,7 @@
 		// references:
 		//   personal testing,
 		//   http://unixpapa.com/js/key.html
+		// < 32 are control chars
 		32: '  ', // All
 		39: '\'"', // Op?
 		42: '**', // Op10.62
@@ -31,30 +38,31 @@
 		45: '--', // Op10.62
 		46: '.>', // Op?
 		47: '//', // Op10.62
+		// 48-57 are digits 0-9
+		59: ';:', // FF3.6, S5, Ch6, Op10.62
 		61: '=+', // Op10.62
-		78: '..', // Op10.62
-		192: '`~', // FF3.6, S5, Ch6, Op10.62, IE8
-		126: '`~', // Mac FF?
+		// 65-90 are letters [a-z]
 		91: '[{', // Op?
 		92: '\\|', // Op?
 		93: ']}', // Op?
-		96: '`~', // Op?
-		109: '-_', // FF3.6, Op10.62, IE8
+		// 96-105 are keypad digits
+		106: '**', // FF3.6, S5, Ch6, IE8
 		107: '=+', // FF3.6, IE8  (Note: num pad + on some keyboards will be 107)
-		219: '[{', // FF3.6, S5, Ch6, Op10.62, IE8
-		221: ']}', // FF3.6, S5, Ch6, Op10.62, IE8
-		220: '\\|', // FF3.6, S5, Ch6, Op10.62
-		59: ';:', // FF3.6, S5, Ch6, Op10.62
-		222: '\'"', // FF3.6, S5, Ch6, Op10.62, IE8
+		109: '-_', // FF3.6, Op10.62, IE8
+		110: '..', // FF3.6, S5, Ch6
+		111: '//', // FF3.6, IE8
+		126: '`~', // Mac FF?
 		186: ';:', // S5, Ch6, IE8
 		187: '=+', // S5, Ch6
 		188: ',<', // FF3.6, S5, Ch6, Op10.62, IE8
 		189: '-_', // S5, Ch6
 		190: '.>', // FF3.6, S5, Ch6, Op10.62, IE8
 		191: '/?', // FF3.6, S5, Ch6, Op10.62, IE8
-		111: '//', // FF3.6, IE8
-		106: '**', // FF3.6, S5, Ch6, IE8
-		110: '..' // FF3.6, S5, Ch6
+		192: '`~', // FF3.6, S5, Ch6, Op10.62, IE8
+		219: '[{', // FF3.6, S5, Ch6, Op10.62, IE8
+		220: '\\|', // FF3.6, S5, Ch6, Op10.62
+		221: ']}', // FF3.6, S5, Ch6, Op10.62, IE8
+		222: '\'"' // FF3.6, S5, Ch6, Op10.62, IE8
 	};
 	function eventAscii(evt) {
 		var kc = evt.keyCode, ascii;
@@ -79,6 +87,7 @@
 		else if ((ascii = symbolMap[kc])) { // symbols
 			ascii = ascii.charAt(evt.shiftKey ? 1 : 0);
 		}
+console.log(evt.keyCode, ascii);
 		return ascii;
 	}
 	var listen = document.addEventListener ?
@@ -156,6 +165,7 @@
 		toString: function() {
 			return this.format();
 		},
+		// remember, this is not enumerable!
 		valueOf: function() {
 			return this.raw;
 		},
@@ -181,6 +191,7 @@
 		return klass;
 	};
 
+	var nada = {};
 	// constructor (same as above)
 	function DataString(value) {
 		if (value !== nada) {

@@ -6,7 +6,7 @@ DataString.Number = DataString.createSubclass({
 		return DataString.numberFormat(this.valueOf(), precision);
 	},
 	valueOf: function() {
-		var n = parseFloat(this.raw);
+		var n = parseFloat(this.raw.replace(/[^\d.-]/g, ''));
 		return isNaN(n) ? 0 : n;
 	},
 	isAllowedChar: function(c) {

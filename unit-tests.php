@@ -1,7 +1,7 @@
 <?php
 
 $begin = microtime(true);
-$subclasses = array('Aba','Cc','Date','Number','Dollars','PhoneUs10');
+$subclasses = array('Aba','Cc','Date','Number','Dollars','PhoneUs10','UrlAscii');
 
 require_once(dirname(__FILE__) . "/src/DataString.php");
 foreach ($subclasses as $sub) {
@@ -43,7 +43,8 @@ DataString.Dollars.keyMaskInput('bucks2')
 String.prototype.getCheckdigit = function() {
 	var i = 0, sum = 0;
 	while (i < this.length) {
-		sum += ((i % 2) == 0 ? 2 : 1) * parseInt(this[i++], 10);
+		sum += ((i % 2) == 0 ? 2 : 1) * parseInt(this.slice(i,1), 10);
+		i++;
 	}
 	return 10 - (sum % 10);
 }
@@ -66,7 +67,7 @@ with (QUnit) {
 		array('-0','0'),
 		array('-1','-1'),
 		array('123.1234','123.12', 2),
-		array('$123','0.00', 2),
+		array('$123','123.00', 2),
 	))?>
 
 	<?php createAndInvoke("Dollars", "format", array(
@@ -121,9 +122,9 @@ with (QUnit) {
 		array('1-200-200-2000','2002002000'),
 		array('(200) 200-2000','2002002000'),
 		array('1 (200) 200-2000','2002002000'),
-		array('(200) 200-2000 x123','2002002000 x123'),
-		array('(200) 200-2000 ext. 123','2002002000 ext. 123'),
-		array('(200) 200-2000 cell','2002002000 cell'),
+		array('(200) 200-2000 x123','2002002000'),
+		array('(200) 200-2000 ext. 123','2002002000'),
+		array('(200) 200-2000 cell','2002002000'),
 	))?>
 
 	<?php createAndInvoke("PhoneUs10", "format", array(
@@ -189,6 +190,44 @@ with (QUnit) {
 		array('13-March-2010','2010-03-13'),
 		array('March 13, 2010','2010-03-13'),
 	))?>
+
+	test('DataString.UrlAscii(value).getParts()', function() {
+		var i = 0;
+		function testParts(url, scheme, user, pass, host, port, path, query, fragment) {
+			var parts = new DataString.UrlAscii(url).getParts();
+			i++;
+			if (parts) {
+				equal(parts.scheme, scheme, i + '. scheme in `' + url + '`');
+				equal(parts.user, user, i + '. user in `' + url + '`');
+				equal(parts.pass, pass, i + '. pass in `' + url + '`');
+				equal(parts.host, host, i + '. host in `' + url + '`');
+				equal(parts.port, port, i + '. port in `' + url + '`');
+				equal(parts.path, path, i + '. path in `' + url + '`');
+				equal(parts.query, query, i + '. query in `' + url + '`');
+				equal(parts.fragment, fragment, i + '. fragment in `' + url + '`');
+			}
+			else {
+				ok(false, i + '.scheme and or host not found in url `' + url + '`');
+			}
+		}
+		var u = undefined, url;
+
+		url  = 'http://host';
+		testParts(url, 'http', u, u, 'host');
+
+		url = 'http://host.com';
+		testParts(url, 'http', u, u, 'host.com');
+
+		url = 'http://host.com/path/one/two/?query#fragment';
+		testParts(url, 'http', u, u, 'host.com', u, 'path/one/two', 'query', 'fragment');
+
+		url = 'http://user@host.com/path/one/two/?query=1#fragment';
+		testParts(url, 'http', 'user', u, 'host.com', u, 'path/one/two', 'query=1', 'fragment');
+
+		url = 'http://user:password@host.com:1234/path/one/two/?query=1&a=2#fragment';
+		testParts(url, 'http', 'user', 'password', 'host.com', 1234, 'path/one/two', 'query=1&a=2', 'fragment');
+
+	});
 
 }
 

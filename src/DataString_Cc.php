@@ -2,8 +2,8 @@
 
 class DataString_Cc extends DataString {
 
-	public $matcher15 = '/^(\d{4})\D*(\d{6})\D*(\d{5})$/';
-	public $matcher16 = '/^(\d{4})\D*(\d{4})\D*(\d{4})\D*(\d{4})$/';
+	public $matcher15 = '/^(\d{4})\D?(\d{6})\D?(\d{5})$/';
+	public $matcher16 = '/^(\d{4})\D?(\d{4})\D?(\d{4})\D?(\d{4})$/';
 
 	public function isValid() {
 		return $this->isValidFormat() && $this->isValidChecksum() && $this->isSupportedType();
@@ -55,7 +55,7 @@ class DataString_Cc extends DataString {
 	public function getType() {
 		// not intended to validate number, just guess what card type user
 		// is trying to use by looking at known prefixes
-		if (preg_match('/^(34|35|36|37|4|5|6011)/', $this->raw, $m)) {
+		if (preg_match('/^(3[4-7]|4|5|6011)/', $this->raw, $m)) {
 			switch ($m[1]) {
 				case '6011': return 'disc';
 				case '5':    return 'mc';
