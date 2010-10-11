@@ -15,7 +15,7 @@ class DataString_Ssn extends DataString {
 			return false;
 		}
 		// currently the highest area number (first 3 digits) is 733, but we allow higher
-		return;
+		return true;
 	}
 
 	public function format() {
