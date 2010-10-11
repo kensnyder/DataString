@@ -357,13 +357,16 @@ DataString.Date = DataString.createSubclass({
 		[/(3[01]|[0-2]\d|\d)\s*\.\s*(1[0-2]|0\d|\d)\s*\.\s*([1-9]\d{3})/, '$2/$1/$3']
 	],
 	setValue: function(date) {
+		this.raw = date || '';
 		this.date = undefined;
-		var parser, i = 0;
-		while ((parser = this.parsers[i++])) {
-			if (!date.match(parser[0])) {
-				continue;
+		if (this.raw.length) {
+			var parser, i = 0;
+			while ((parser = this.parsers[i++])) {
+				if (!date.match(parser[0])) {
+					continue;
+				}
+				this.date = new Date(Date.parse(date.replace(parser[0], parser[1])));
 			}
-			this.date = new Date(Date.parse(date.replace(parser[0], parser[1])));
 		}
 		return this;
 	},
@@ -378,7 +381,7 @@ DataString.Date = DataString.createSubclass({
 		return this.date.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + this.date.getDate();
 	},
 	valueOf: function() {
-		return this.date;
+		return this.date || '';
 	}
 });
 
@@ -402,14 +405,20 @@ DataString.Number = DataString.createSubclass({
 DataString.Dollars = DataString.Number.createSubclass({
 	format: function(doRound) {
 		return '$' + DataString.numberFormat(this.valueOf(), doRound ? 0 : 2);
+	},
+	isValid: function() {
+		return (/^\$?\d+(\.\d\d)?$/).test(this.raw.replace(/,/g, ''));
 	}
 });
 
 DataString.Email = DataString.createSubclass({
+
 	matcher: /^[^@]+@[^@]+$/,
+
 	isValid: function() {
 		return this.matcher.test(this.raw);
 	}
+	
 });
 
 
@@ -419,7 +428,7 @@ DataString.Percent = DataString.Number.createSubclass({
 		if (!this.isValid()) {
 			return '';
 		}
-		var num = this.raw.replace(/\D/g, '');
+		var num = this.raw.replace(/[^\d.-]/g, '');
 		if (typeof precision != 'undefined') {
 			num = num.toFixed(precision);
 		}
@@ -427,7 +436,7 @@ DataString.Percent = DataString.Number.createSubclass({
 	},
 
 	valueOf: function() {
-		var num = parseFloat(this.raw.replace(/\D/g, ''));
+		var num = parseFloat(this.raw.replace(/[^\d.-]/g, ''));
 		if (isNaN(num)) {
 			return 0;
 		}
@@ -458,7 +467,7 @@ DataString.PhoneUs10 = DataString.createSubclass({
 });
 
 
-DataString.PhoneUs10 = DataString.createSubclass({
+DataString.Ssn = DataString.createSubclass({
 	matcher: /^(\d{3})\D*(\d{2})\D*(\d{4})$/,
 
 	isValid: function() {
@@ -509,6 +518,20 @@ DataString.UrlAscii = DataString.createSubclass({
 
 	isValid: function() {
 		return !!this.getParts();
+		/*
+		var combined =
+			parts.scheme + '://' +
+			(parts.user || '') +
+			(parts.password ? ':' + parts.password : '') +
+			(parts.user ? '@' : '') +
+			parts.host +
+			(parts.port ? ':' + parts.port : '') +
+			(parts.path || '') +
+			(parts.query ? '?' + parts.query : '') +
+			(parts.fragment ? '#' + parts.fragment : '');
+			*/
+console.log(combined);
+		return this.raw == combined;
 	},
 
 	getParts: function() {
@@ -521,7 +544,7 @@ DataString.UrlAscii = DataString.createSubclass({
 				parts[part] = false;
 			}
 		}
-		if (!parts.scheme || !parts.host) {
+		if ((!parts.scheme || !parts.host) || (parts.password && !parts.user)) {
 			return false;
 		}
 		parts.path = parts.path ? parts.path.replace(/\/$/, '') : false;

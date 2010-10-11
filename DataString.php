@@ -201,12 +201,20 @@ class DataString_Date extends DataString {
 	public $date;
 	
 	public function setValue($date) {
+		$this->raw = $date;
 		$this->date = null;
-		foreach ($this->parsers as $parser) {
-			if (!preg_match($parser[0], $date)) {
-				continue;
+		if (strlen($this->raw)) {
+			foreach ($this->parsers as $parser) {
+				if (!preg_match($parser[0], $date)) {
+					continue;
+				}
+				try {
+					$this->date = new DateTime(preg_replace($parser[0], $parser[1], $date));
+				}
+				catch(Exception $e) {
+					// invalid or unknown date
+				}
 			}
-			$this->date = new DateTime(preg_replace($parser[0], $parser[1], $date));
 		}
 		return $this;
 	}
@@ -223,7 +231,7 @@ class DataString_Date extends DataString {
 	}
 
 	public function valueOf() {
-		return $this->date;
+		return $this->date ? $this->date : '';
 	}
 
 }
@@ -277,7 +285,7 @@ class DataString_Percent extends DataString_Number {
 		if (!$this->isValid()) {
 			return '';
 		}
-		$num = preg_replace('/\D/', '', $this->raw);
+		$num = preg_replace('/[^\d.-]/', '', $this->raw);
 		if ($precision !== null) {
 			$num = number_format($num, $precision, '.', '');
 		}
@@ -285,7 +293,7 @@ class DataString_Percent extends DataString_Number {
 	}
 
 	public function valueOf() {
-		$num = (float) preg_replace('/\D/', '', $this->raw);
+		$num = (float) preg_replace('/[^\d.-]/', '', $this->raw);
 		return $num / 100;
 	}
 
@@ -311,7 +319,7 @@ class DataString_PhoneUs10 extends DataString {
 }
 
 
-class Quad_Data_Ss extends Quad_Data_Abstract {
+class DataString_Ssn extends DataString {
 
 	public $matcher = '/^(\d{3})\D*(\d{2})\D*(\d{4})$/';
 
