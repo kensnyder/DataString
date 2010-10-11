@@ -14,6 +14,20 @@ DataString.UrlAscii = DataString.createSubclass({
 
 	isValid: function() {
 		return !!this.getParts();
+		/*
+		var combined =
+			parts.scheme + '://' +
+			(parts.user || '') +
+			(parts.password ? ':' + parts.password : '') +
+			(parts.user ? '@' : '') +
+			parts.host +
+			(parts.port ? ':' + parts.port : '') +
+			(parts.path || '') +
+			(parts.query ? '?' + parts.query : '') +
+			(parts.fragment ? '#' + parts.fragment : '');
+			*/
+console.log(combined);
+		return this.raw == combined;
 	},
 
 	getParts: function() {
@@ -26,7 +40,7 @@ DataString.UrlAscii = DataString.createSubclass({
 				parts[part] = false;
 			}
 		}
-		if (!parts.scheme || !parts.host) {
+		if ((!parts.scheme || !parts.host) || (parts.password && !parts.user)) {
 			return false;
 		}
 		parts.path = parts.path ? parts.path.replace(/\/$/, '') : false;

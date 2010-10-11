@@ -1,7 +1,7 @@
 <?php
 
 $begin = microtime(true);
-$subclasses = array('Aba','Cc','Date','Number','Dollars','PhoneUs10','UrlAscii');
+$subclasses = array('Aba','Cc','Date','Number','Dollars','Email','Percent','PhoneUs10','PhoneUs7','Ssn','UrlAscii','ZipUs');
 
 require_once(dirname(__FILE__) . "/src/DataString.php");
 foreach ($subclasses as $sub) {
@@ -22,23 +22,101 @@ foreach ($subclasses as $sub) {
 </head>
 <body>
 
-<input type="text" name="cc" id="cc" value="4111111111111111" /><br />
-<input type="text" name="bucks" id="bucks" value="123456.55" /><br />
-<input type="text" name="bucks2" id="bucks2" value="bucks" /><br />
-<div style="clear: both;"></div>
+<table cellspacing="0">
+	<tr>
+		<td>
 
-<div id="unit-output">
-	<h1 id="qunit-header">DataString Unit Tests</h1>
-	<h2 id="qunit-banner"></h2>
-	<h2 id="qunit-userAgent"></h2>
-	<ol id="qunit-tests"><li></li></ol>
-</div>
+			<div id="unit-output">
+				<h1 id="qunit-header">DataString Unit Tests</h1>
+				<h2 id="qunit-banner"></h2>
+				<h2 id="qunit-userAgent"></h2>
+				<ol id="qunit-tests"><li></li></ol>
+			</div>
+
+		</td>
+		<td class="fixtures"><div class="page-raised">
+
+			<table class="data" id="examples">
+				<tr>
+					<th>Class</th>
+					<th>Auto-Format Input</th>
+					<th>#isEmpty()</th>
+					<th>#isValid()</th>
+					<th>#toString()</th>
+					<th>#valueOf()</th>
+				</tr>
+				<?php foreach ($subclasses as $sub) { ?>
+					<tr>
+						<td><?php echo $sub?></td>
+						<td><input type="text" name="<?php echo $sub?>" class="auto" value="" /></td>
+						<td id="<?php echo $sub?>-isEmpty"></td>
+						<td id="<?php echo $sub?>-isValid"></td>
+						<td id="<?php echo $sub?>-toString"></td>
+						<td id="<?php echo $sub?>-valueOf"></td>
+					</tr>
+				<?php } ?>
+			</table>
+
+			<p>Enter a URL</p>
+
+			<table class="data" id="getPartsTable">
+				<tr>
+					<th>Url Input</th>
+					<th>.scheme</th>
+					<th>.user</th>
+					<th>.pass</th>
+					<th>.host</th>
+					<th>.port</th>
+					<th>.path</th>
+					<th>.query</th>
+					<th>.fragment</th>
+				</tr>
+				<tr>
+					<td><input type="text" id="getPartsInput" size="70" value="http://sub.domain.com?a=1&b=2#section1" /></td>
+					<td id="scheme"></td>
+					<td id="user"></td>
+					<td id="pass"></td>
+					<td id="host"></td>
+					<td id="port"></td>
+					<td id="path"></td>
+					<td id="query"></td>
+					<td id="fragment"></td>
+				</tr>
+			</table>
+
+		</div></td>
+	</tr>
+</table>
 
 <script type="text/javascript">
 
-DataString.Cc.autoFormatInput('cc');
-DataString.Dollars.autoFormatInput('bucks');
-DataString.Dollars.keyMaskInput('bucks2')
+function $(id) { return document.getElementById(id); }
+var inputs = $('examples').getElementsByTagName('input');
+var i = 0, input;
+while ((input = inputs[i++])) {
+	input.onkeyup = input.onblur = function() {
+		var ds = new DataString[this.name](this.value);
+		$(this.name + '-isEmpty').innerHTML = ds.isEmpty() ? 'true' : 'false';
+		$(this.name + '-isValid').innerHTML = ds.isValid() ? 'true' : 'false';
+		$(this.name + '-toString').innerHTML = ds.toString();
+		$(this.name + '-valueOf').innerHTML = ds.valueOf();
+	};
+	input.onkeyup.call(input);
+}
+
+var gpi = $('getPartsInput');
+gpi.onkeyup = gpi.onblur = function() {
+	var parts = new DataString.UrlAscii(this.value).getParts();
+	$('scheme').innerHTML = parts.scheme || '';
+	$('user').innerHTML = parts.user || '';
+	$('pass').innerHTML = parts.pass || '';
+	$('host').innerHTML = parts.host || '';
+	$('port').innerHTML = parts.port || '';
+	$('path').innerHTML = parts.path || '';
+	$('query').innerHTML = parts.query || '';
+	$('fragment').innerHTML = parts.fragment || '';
+};
+gpi.onkeyup.call(gpi);
 
 String.prototype.getCheckdigit = function() {
 	var i = 0, sum = 0;

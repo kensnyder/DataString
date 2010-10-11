@@ -13,7 +13,7 @@ class DataString_ZipUs extends DataString {
 			return '';
 		}
 		preg_match($this->matcher, $this->raw, $m);
-		return $m[1];
+		return $m ? $m[1] : '';
 	}
 	
 }

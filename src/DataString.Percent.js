@@ -4,7 +4,7 @@ DataString.Percent = DataString.Number.createSubclass({
 		if (!this.isValid()) {
 			return '';
 		}
-		var num = this.raw.replace(/\D/g, '');
+		var num = this.raw.replace(/[^\d.-]/g, '');
 		if (typeof precision != 'undefined') {
 			num = num.toFixed(precision);
 		}
@@ -12,7 +12,7 @@ DataString.Percent = DataString.Number.createSubclass({
 	},
 
 	valueOf: function() {
-		var num = parseFloat(this.raw.replace(/\D/g, ''));
+		var num = parseFloat(this.raw.replace(/[^\d.-]/g, ''));
 		if (isNaN(num)) {
 			return 0;
 		}

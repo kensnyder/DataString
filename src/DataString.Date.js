@@ -29,13 +29,16 @@ DataString.Date = DataString.createSubclass({
 		[/(3[01]|[0-2]\d|\d)\s*\.\s*(1[0-2]|0\d|\d)\s*\.\s*([1-9]\d{3})/, '$2/$1/$3']
 	],
 	setValue: function(date) {
+		this.raw = date || '';
 		this.date = undefined;
-		var parser, i = 0;
-		while ((parser = this.parsers[i++])) {
-			if (!date.match(parser[0])) {
-				continue;
+		if (this.raw.length) {
+			var parser, i = 0;
+			while ((parser = this.parsers[i++])) {
+				if (!date.match(parser[0])) {
+					continue;
+				}
+				this.date = new Date(Date.parse(date.replace(parser[0], parser[1])));
 			}
-			this.date = new Date(Date.parse(date.replace(parser[0], parser[1])));
 		}
 		return this;
 	},
@@ -50,6 +53,6 @@ DataString.Date = DataString.createSubclass({
 		return this.date.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + this.date.getDate();
 	},
 	valueOf: function() {
-		return this.date;
+		return this.date || '';
 	}
 });

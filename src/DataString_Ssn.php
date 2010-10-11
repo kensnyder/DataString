@@ -1,6 +1,6 @@
 <?php
 
-class Quad_Data_Ss extends Quad_Data_Abstract {
+class DataString_Ssn extends DataString {
 
 	public $matcher = '/^(\d{3})\D*(\d{2})\D*(\d{4})$/';
 

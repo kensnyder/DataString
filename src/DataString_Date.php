@@ -34,12 +34,20 @@ class DataString_Date extends DataString {
 	public $date;
 	
 	public function setValue($date) {
+		$this->raw = $date;
 		$this->date = null;
-		foreach ($this->parsers as $parser) {
-			if (!preg_match($parser[0], $date)) {
-				continue;
+		if (strlen($this->raw)) {
+			foreach ($this->parsers as $parser) {
+				if (!preg_match($parser[0], $date)) {
+					continue;
+				}
+				try {
+					$this->date = new DateTime(preg_replace($parser[0], $parser[1], $date));
+				}
+				catch(Exception $e) {
+					// invalid or unknown date
+				}
 			}
-			$this->date = new DateTime(preg_replace($parser[0], $parser[1], $date));
 		}
 		return $this;
 	}
@@ -56,7 +64,7 @@ class DataString_Date extends DataString {
 	}
 
 	public function valueOf() {
-		return $this->date;
+		return $this->date ? $this->date : '';
 	}
 
 }

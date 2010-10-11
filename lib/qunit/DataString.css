@@ -10,16 +10,20 @@ body {
 }
 /* layout */
 #unit-output {
-	width: 35%;
-	float: left;
+	width: 450px;
 }
-#unit-page-content {
-	margin-left: 37%;
-	-moz-box-shadow: 0 3px 20px #999;
-	-webkit-box-shadow: 0 3px 20px #999;
-	box-shadow: 0 3px 20px #999;
+.fixtures {
+	vertical-align: top;
+	padding-left: 30px;
+}
+.page-raised {
+	box-shadow: 3px 3px 8px #b1b1b1;
+	-moz-box-shadow: 3px 3px 8px #b1b1b1;
+	-webkit-box-shadow: 3px 3px 8px #b1b1b1;
 	padding: 8px;
+	border: 1px solid #ccc;
 }
+
 /* visual */
 #php-summary {
 	clear: both;
@@ -205,4 +209,20 @@ strong b.fail{
 }
 strong b.pass{
 	color:#029102;
+}
+
+table.data {
+	border-collapse: collapse;
+}
+table.data th {
+	font-weight: bold;
+	text-align: left;
+	vertical-align: bottom;
+	padding: 0 5px 2px 5px;
+}
+table.data td {
+	text-align: left;
+	vertical-align: top;
+	border: 1px solid #ccc;
+	padding: 2px 5px;
 }

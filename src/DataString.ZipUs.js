@@ -7,6 +7,7 @@ DataString.ZipUs = DataString.createSubclass({
 		if (!this.isValid) {
 			return '';
 		}
-		return this.raw.match(this.matcher)[1];
+		var match = this.raw.match(this.matcher);
+		return match ? match[1] : '';
 	}
 });

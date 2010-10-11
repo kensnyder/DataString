@@ -83,7 +83,7 @@ h2#qunit-banner.qunit-fail, #qunit-testrunner-toolbar {
 #qunit-testrunner-toolbar {
 	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
 	padding:0;
-	/*width:80%;*/
+	width:450px;
 	padding:0em 0 0.5em 2em;
 	font-size: small;
 }
@@ -113,7 +113,11 @@ p#qunit-testresult{
 }
 strong b.fail{
 	color:#710909;
-	}
+}
 strong b.pass{
 	color:#5E740B;
-	}
+}
+.fixtures {
+	vertical-align: top;
+	padding-left: 30px;
+}

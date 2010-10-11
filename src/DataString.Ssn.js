@@ -1,4 +1,4 @@
-DataString.PhoneUs10 = DataString.createSubclass({
+DataString.Ssn = DataString.createSubclass({
 	matcher: /^(\d{3})\D*(\d{2})\D*(\d{4})$/,
 
 	isValid: function() {

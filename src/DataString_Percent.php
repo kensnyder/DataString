@@ -6,7 +6,7 @@ class DataString_Percent extends DataString_Number {
 		if (!$this->isValid()) {
 			return '';
 		}
-		$num = preg_replace('/\D/', '', $this->raw);
+		$num = preg_replace('/[^\d.-]/', '', $this->raw);
 		if ($precision !== null) {
 			$num = number_format($num, $precision, '.', '');
 		}
@@ -14,7 +14,7 @@ class DataString_Percent extends DataString_Number {
 	}
 
 	public function valueOf() {
-		$num = (float) preg_replace('/\D/', '', $this->raw);
+		$num = (float) preg_replace('/[^\d.-]/', '', $this->raw);
 		return $num / 100;
 	}
 
