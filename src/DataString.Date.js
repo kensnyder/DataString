@@ -50,7 +50,8 @@ DataString.Date = DataString.createSubclass({
 			return '';
 		}
 		var month = this.date.getMonth() + 1;
-		return this.date.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + this.date.getDate();
+		var day = this.date.getDate();
+		return this.date.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
 	},
 	valueOf: function() {
 		return this.date || '';
