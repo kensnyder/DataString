@@ -1,5 +1,7 @@
 # DataString
 
+Uses of DataString
+
 DataString provides equivalent classes in JavaScript and PHP to handle string-based data.
 
 It aims to allow users to enter data in intuitive formats that are also easily manipulated by your programs. Take credit cards numbers for example:
